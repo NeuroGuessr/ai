@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "ai"
+version = "0.1.0"
+description = ""
+authors = ["Arch4ngel21 pweglik sgol13 superiorshrimp Qesterius TriffleMichael"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
