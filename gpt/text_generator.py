@@ -18,7 +18,7 @@ class PromptGenerator():
         self.system_rules = "{} should be around 7 words long response should include a subject (person, object, or location) and descriptors (adverbs and adjectives that describe the subject).Avoid using abstract concepts in spite of concrete nouns. Responses whould be in simple english. Avoid adding request context".format(self.response_type_specifier)
     
    
-    def generatePrompt(self,category:str,  n_sentences:int, randomness_temperature:float=1.0, accuracy_filter:float=1.0, max_tokens:int=10) -> str:
+    def generatePrompt(self,category:str,  n_sentences:int, randomness_temperature:float=1.0, accuracy_filter:float=1.0, max_tokens:int=10) -> list[str]:
         response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[ 
@@ -40,7 +40,6 @@ class PromptGenerator():
     
 
 
-prompt = PromptGenerator()
-
-for i in prompt.generatePrompt("coconuts", 30):
-    print(i)
+#prompt = PromptGenerator()
+#for i in prompt.generatePrompt("coconuts", 30):
+#    print(i)
