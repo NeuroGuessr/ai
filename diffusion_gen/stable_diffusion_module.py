@@ -29,10 +29,12 @@ class DiffusionImageGenerator:
         self.pipeline = DiffusionPipeline.from_pretrained(
             "runwayml/stable-diffusion-v1-5"
         )
+
+        # Disable NSFW filter
         self.pipeline.safety_checker = lambda images, clip_input: (
             images,
             False,
-        )  # Disable NSFW filter
+        )
         if torch.cuda.is_available():
             print("Using cuda device")
             self.pipeline.to("cuda")
@@ -55,54 +57,45 @@ class DiffusionImageGenerator:
         inference_time = end - start
         return generated_images, inference_time
 
-    def generation_loop(self) -> np.ndarray:
-        while True:
-            if len(self.mean_time_memory) == 5:
-                self.mean_time = sum(self.mean_time_memory) / len(
-                    self.mean_time_memory
-                )
-            elif len(self.mean_time_memory) > 10:
-                self.mean_time = (
-                    self.mean_time * (1 - self.mean_alpha)
-                    + self.mean_alpha * self.mean_time_memory[-1]
-                )
-
-            print(f"MEAN_TIME = {self.mean_time}")
-            print(f"INFERENCE_STEPS = {self.inference_steps}")
-
-            prompt = input("Enter prompt: ")
-
-            if prompt == "QUIT":
-                return
-
-            images, inference_time = self.image_generation(
-                self.pipeline, prompt
+    def run(self, prompt: str) -> np.ndarray:
+        if len(self.mean_time_memory) == 5:
+            self.mean_time = sum(self.mean_time_memory) / len(
+                self.mean_time_memory
+            )
+        elif len(self.mean_time_memory) > 10:
+            self.mean_time = (
+                self.mean_time * (1 - self.mean_alpha)
+                + self.mean_alpha * self.mean_time_memory[-1]
             )
 
-            yield images
-            del images
+        print(f"MEAN_TIME = {self.mean_time}")
+        print(f"INFERENCE_STEPS = {self.inference_steps}")
 
-            # Update mean_time and inference steps
-            if len(self.mean_time_memory) == 5:
-                self.mean_time_memory.pop(0)
-            self.mean_time_memory.append(inference_time)
+        images, inference_time = self.image_generation(self.pipeline, prompt)
 
-            if self.mean_time != 0:
-                if inference_time + self.epsilon > self.mean_time:
-                    self.inference_steps *= 1 - self.inference_alpha
-                elif inference_time - self.epsilon < self.mean_time:
-                    self.inference_steps *= 1 + self.inference_alpha
-                self.inference_steps = int(
-                    np.clip(
-                        self.inference_steps,
-                        self.bottom_limit_inference_steps,
-                        self.upper_limit_inference_steps,
-                    )
+        # Update mean_time and inference steps
+        if len(self.mean_time_memory) == 5:
+            self.mean_time_memory.pop(0)
+        self.mean_time_memory.append(inference_time)
+
+        if self.mean_time != 0:
+            if inference_time + self.epsilon > self.mean_time:
+                self.inference_steps *= 1 - self.inference_alpha
+            elif inference_time - self.epsilon < self.mean_time:
+                self.inference_steps *= 1 + self.inference_alpha
+            self.inference_steps = int(
+                np.clip(
+                    self.inference_steps,
+                    self.bottom_limit_inference_steps,
+                    self.upper_limit_inference_steps,
                 )
+            )
 
-            with torch.no_grad():
-                torch.cuda.empty_cache()
-            gc.collect()
+        with torch.no_grad():
+            torch.cuda.empty_cache()
+        gc.collect()
+
+        return images
 
 
 def image_grid(images):
@@ -120,5 +113,9 @@ def image_grid(images):
 
 if __name__ == "__main__":
     generator = DiffusionImageGenerator()
-    for images in generator.generation_loop():
+    while True:
+        prompt = input("Enter prompt: ")
+        if prompt == "QUIT":
+            break
+        images = generator.run(prompt)
         image_grid(images)
