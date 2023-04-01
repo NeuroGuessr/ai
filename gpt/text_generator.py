@@ -33,14 +33,15 @@ class BasePromptGenerator():
                 temperature=randomness_temperature,
                 top_p=accuracy_filter,
                 n=n_sentences,
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
+                frequency_penalty=1.6
         )
         #print(resp)
         return resp
 class RegularPromptGenerator(BasePromptGenerator):
     def __init__(self,response_type_specifier:str="prompt text"):
         self.response_type_specifier = response_type_specifier
-        self.system_rules = "{} should be around 7 words long response should include a subject (person, object, or location) and descriptors (adverbs and adjectives that describe the subject).Avoid using abstract concepts in spite of concrete nouns. Responses whould be in simple english. Avoid adding request context".format(self.response_type_specifier)
+        self.system_rules = "{} should be around 7 words long response should include a subject (person, object, or location) and descriptors (adverbs and adjectives that describe the subject) which are not that objects natural attribute.Avoid using abstract concepts in spite of concrete nouns. Responses whould be in simple english. Avoid adding request context. Responses should differentiate ".format(self.response_type_specifier)
     
     def generate(self,category:str,  n_sentences:int, n_extra_decorator_keywords:int=2, randomness_temperature:float=1.0, accuracy_filter:float=1.0, max_tokens:int=10) -> list[str]:
         user_prompt = 'generate random {} as instructed by system for image generation in category:"{}"'.format(self.response_type_specifier,category)
@@ -95,7 +96,7 @@ def test():
     blend_prompt = BlendPromptGenerator()
 
     print("regular prompt")
-    for i in reg_prompt.generate("coconuts", 30):
+    for i in reg_prompt.generate("coconuts aliens", 30,randomness_temperature=2.0, accuracy_filter=1):
         print(i)
         
     print("blend prompt")
