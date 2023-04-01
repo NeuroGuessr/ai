@@ -49,7 +49,7 @@ class RegularPromptGenerator(BasePromptGenerator):
         sentences =[]
         try:
             for i in response["choices"]:
-                sentences.append("{}{}".format(filter_out_sc(i["message"]["content"]),self.random_decorators( n_extra_decorator_keywords )))
+                sentences.append("{},{}".format(filter_out_sc(i["message"]["content"]),self.random_decorators( n_extra_decorator_keywords )))
         except:
             print("Extracting JSON response failed:")
             print(response)
@@ -101,3 +101,4 @@ def test():
     print("blend prompt")
     for i in blend_prompt.generate(["marvel universe","polish politicans"], 30):
         print(i)
+test()
