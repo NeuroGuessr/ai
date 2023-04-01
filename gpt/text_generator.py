@@ -1,5 +1,9 @@
 import openai, random
+
 openai.api_key = "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"
+
+category = "frogs"
+n_sentences = 4
 
 
 def filter_out_sc(input:str)->str:

@@ -1,6 +1,8 @@
 accelerate
 black
 diffusers[torch]
+jsonschema==4.17.3
+openai==0.27.2
 pre-commit
 torch @ https://download.pytorch.org/whl/cu116/torch-1.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl
 torchaudio @ https://download.pytorch.org/whl/cu116/torchaudio-0.13.1%2Bcu116-cp39-cp39-linux_x86_64.whl
