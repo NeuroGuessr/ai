@@ -147,7 +147,7 @@ Underwater:145:A curious octopus lurking in murky coral.
 Underwater:146:A curious octopus exploring a coral reef.
 Underwater:147:A curious octopus explores a vibrant coral reef.
 Underwater:148:A graceful mermaid exploring a vibrant coral reef.
-Underwater:149:A clownfish swimming among vibrant coral reefs.
+Underwater:149:A graceful mermaid gracefully swims by coral.
 Underwater:150:A mermaid gracefully swims amongst colorful corals.
 Underwater:151:A graceful dolphin jumps through turquoise waves.
 Underwater:152:A colorful school of fish swimming gracefully.
