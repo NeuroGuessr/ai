@@ -1,0 +1,12 @@
+c1:0:Lonely robot survivor stumbles upon abandoned city0
+c1:1:Lonely robot survivor stumbles upon abandoned city1
+c1:2:Lonely robot survivor stumbles upon abandoned city2
+c1:3:Lonely robot survivor stumbles upon abandoned city3
+c2:4:Fire-breathing dragon soaring over mountains at night4
+c2:5:Fire-breathing dragon soaring over mountains at night5
+c2:6:Fire-breathing dragon soaring over mountains at night6
+c2:7:Fire-breathing dragon soaring over mountains at night7
+c3:12:Businessman filling fraudulent tax returns nervously12
+c3:13:Businessman filling fraudulent tax returns nervously13
+c3:14:Businessman filling fraudulent tax returns nervously14
+c3:15:Businessman filling fraudulent tax returns nervously15
