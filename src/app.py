@@ -67,14 +67,21 @@ async def serve_games(key: str, game_info: Category):
         raise HTTPException(status_code=418, detail="requested too many images!")
     
     images = sample(list(zip(pairs.keys(), pairs.values())), stages*per_stage)
+    # print(len(images))
     correct = [images[per_stage*stage:per_stage*(stage+1)] for stage in range(stages)]
-    labels = [correct[stage][i][1] for stage in range(stages) for i in range(per_stage)]
-    shuffle(labels)
+    # print(len(correct))
+    labels = [[correct[stage][i][1] for i in range(per_stage)] for stage in range(stages)]
+    # print(len(labels))
+    for i in range(stages):
+        temp = labels[i]
+        shuffle(temp)
+        labels[i] = temp
     
+    # print(labels)
     content = [
         {
             'images': [correct[stage][i][0] for i in range(per_stage)],
-            'labels': labels,
+            'labels': labels[stage],
             'correct': {
                 correct[stage][i][0] : correct[stage][i][1] for i in range(per_stage)
             }
