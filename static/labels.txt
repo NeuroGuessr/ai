@@ -1,12 +1,12 @@
-0:Lonely robot survivor stumbles upon abandoned city
-1:Lonely robot survivor stumbles upon abandoned city
-2:Lonely robot survivor stumbles upon abandoned city
-3:Lonely robot survivor stumbles upon abandoned city
-4:Fire-breathing dragon soaring over mountains at night
-5:Fire-breathing dragon soaring over mountains at night
-6:Fire-breathing dragon soaring over mountains at night
-7:Fire-breathing dragon soaring over mountains at night
-12:Businessman filling fraudulent tax returns nervously
-13:Businessman filling fraudulent tax returns nervously
-14:Businessman filling fraudulent tax returns nervously
-15:Businessman filling fraudulent tax returns nervously
+0:Lonely robot survivor stumbles upon abandoned city0
+1:Lonely robot survivor stumbles upon abandoned city1
+2:Lonely robot survivor stumbles upon abandoned city2
+3:Lonely robot survivor stumbles upon abandoned city3
+4:Fire-breathing dragon soaring over mountains at night4
+5:Fire-breathing dragon soaring over mountains at night5
+6:Fire-breathing dragon soaring over mountains at night6
+7:Fire-breathing dragon soaring over mountains at night7
+12:Businessman filling fraudulent tax returns nervously12
+13:Businessman filling fraudulent tax returns nervously13
+14:Businessman filling fraudulent tax returns nervously14
+15:Businessman filling fraudulent tax returns nervously15
