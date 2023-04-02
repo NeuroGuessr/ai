@@ -16,7 +16,7 @@ class DiffusionImageGenerator:
         self.inference_alpha = 0.05
         self.mean_time = 0
         self.mean_alpha = 0.1
-        self.epsilon = 4
+        self.epsilon = 1
         self.bottom_limit_inference_steps = 25
         self.upper_limit_inference_steps = 60
         self.mean_time_memory = []
@@ -40,7 +40,7 @@ class DiffusionImageGenerator:
             self.pipeline.to("cuda")
 
     def image_generation(
-        self, sd_pipeline: StableDiffusionPipeline, prompt: str
+        self, sd_pipeline: StableDiffusionPipeline, prompt: str, n_images=1
     ):
         start = time()
         generated_images = sd_pipeline(
@@ -49,7 +49,7 @@ class DiffusionImageGenerator:
             height=400,
             width=400,
             num_inference_steps=self.inference_steps,
-            num_images_per_prompt=4,
+            num_images_per_prompt=n_images,
         ).images
 
         end = time()
@@ -79,9 +79,9 @@ class DiffusionImageGenerator:
         self.mean_time_memory.append(inference_time)
 
         if self.mean_time != 0:
-            if inference_time + self.epsilon > self.mean_time:
+            if inference_time > self.mean_time + self.epsilon:
                 self.inference_steps *= 1 - self.inference_alpha
-            elif inference_time - self.epsilon < self.mean_time:
+            elif inference_time < self.mean_time - self.epsilon:
                 self.inference_steps *= 1 + self.inference_alpha
             self.inference_steps = int(
                 np.clip(
@@ -99,11 +99,11 @@ class DiffusionImageGenerator:
 
 
 def image_grid(images):
-    fig = plt.figure(figsize=(4.0, 4.0))
+    fig = plt.figure(figsize=(12.0, 12.0))
     grid = ImageGrid(
         fig,
         111,  # similar to subplot(111)
-        nrows_ncols=(2, 2),  # creates 2x2 grid of axes
+        nrows_ncols=(4, 3),  # creates 2x2 grid of axes
         axes_pad=0.1,  # pad between axes in inch.
     )
     for ax, im in zip(grid, images):
