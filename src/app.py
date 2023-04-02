@@ -19,7 +19,7 @@ async def pass_key(key: str):
         pass
     
 @app.get("/image/{game_id}")
-async def serve_images(game_id: int):
+async def serve_games(game_id: int):
     image_collector = ImageCollector()
     image_collector.load_data()
     pairs = image_collector.filter_images(111)
