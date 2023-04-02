@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from ImageCollector import ImageCollector
 from fastapi.staticfiles import StaticFiles
-from random import shuffle, sample
+from random import shuffle, sample, choice
 import json
 from pydantic import BaseModel
 from CategoryManager import CategoryManager
@@ -21,15 +21,40 @@ class Category(BaseModel):
 @app.get("/")
 async def root():
     return "Up and running"
-
-# @app.get("/{key}")
-# async def pass_key(key: str):
-#     if key == "key":
-#         pass
     
 @app.get("/category")
 async def list_categories():
     return json.dumps(category_manager.get_categories())
+
+@app.post("/category/random")
+async def serve_random_category(game_info: Category):
+    stages = game_info.stages
+    per_stage = game_info.stage_batch_size
+    
+    key = choice(list(category_manager.get_categories().keys()))
+    
+    pairs = image_collector.filter_images(key)
+    
+    if len(pairs) < stages*per_stage:
+        raise HTTPException(status_code=418, detail="requested too many images!")
+    
+    images = sample(list(zip(pairs.keys(), pairs.values())), stages*per_stage)
+    correct = [images[per_stage*stage:per_stage*(stage+1)] for stage in range(stages)]
+    labels = [correct[stage][i][1] for stage in range(stages) for i in range(per_stage)]
+    shuffle(labels)
+    
+    content = [
+        {
+            'images': [correct[stage][i][0] for i in range(per_stage)],
+            'labels': labels,
+            'correct': {
+                correct[stage][i][0] : correct[stage][i][1] for i in range(per_stage)
+            }
+        }
+        for stage in range(stages)
+    ]
+    
+    return json.dumps(content)
 
 @app.post("/category/{key}")
 async def serve_games(key: str, game_info: Category):
@@ -37,6 +62,9 @@ async def serve_games(key: str, game_info: Category):
     per_stage = game_info.stage_batch_size
     
     pairs = image_collector.filter_images(key)
+    
+    if len(pairs) < stages*per_stage:
+        raise HTTPException(status_code=418, detail="requested too many images!")
     
     images = sample(list(zip(pairs.keys(), pairs.values())), stages*per_stage)
     correct = [images[per_stage*stage:per_stage*(stage+1)] for stage in range(stages)]
